@@ -38,3 +38,7 @@ export function toggleFavorite(book: FavoriteBook): FavoriteBook[] {
 
   return updated;
 }
+
+export function clearFavorites() {
+  localStorage.removeItem(FAVORITES_KEY);
+}
