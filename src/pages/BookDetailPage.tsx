@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
 
 import type { Book } from "./SearchPage";
+import { loadFavorites, toggleFavorite } from "../lib/favorites";
 
 export default function BookDetailPage() {
   const { id } = useParams();
@@ -10,6 +12,9 @@ export default function BookDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(() => {
+    return loadFavorites().some((item) => item.id === id);
+  });
 
   useEffect(() => {
     if (!id) return;
@@ -43,8 +48,10 @@ export default function BookDetailPage() {
           return;
         }
 
+        const isbn = doc.isbn?.split(" ")[0];
+
         const mapped: Book = {
-          id: doc.isbn || doc.datetime,
+          id: isbn || doc.datetime,
           title: doc.title,
           author: doc.authors?.[0] || "저자 정보 없음",
           description: doc.contents || "",
@@ -78,7 +85,7 @@ export default function BookDetailPage() {
       <div className="max-w-3xl mx-auto py-10 text-center text-neutral-500">
         <p>{error || "책 정보를 찾을 수 없습니다."}</p>
         <button
-          className="mt-4 px-4 py-2 text-sm rounded-lg bg-neutral-900 text-white"
+          className="mt-4 px-4 py-2 text-sm rounded-lg bg-neutral-900 text-white cursor-pointer"
           onClick={() => navigate(-1)}
         >
           ← 돌아가기
@@ -103,11 +110,28 @@ export default function BookDetailPage() {
         <img
           src={book.image}
           alt={book.title}
-          className="w-40 h-60 object-cover rounded-lg shadow border-3 border-neutral-800"
+          className="w-40 h-60 object-cover"
         />
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold">{book.title}</h1>
-          <p className="text-sm text-neutral-500">저자: {book.author}</p>
+        <div className="w-full flex justify-between">
+          <div className="flex flex-col gap-1 pr-4">
+            <h1 className="text-2xl font-bold">{book.title}</h1>
+            <p className="text-sm text-neutral-500">저자: {book.author}</p>
+          </div>
+          <div>
+            <button
+              className="bg-neutral-100 text-sm w-6 h-6 flex items-center justify-center rounded-full right-3 bottom-15 cursor-pointer"
+              onClick={() => {
+                const updated = toggleFavorite(book);
+                setIsFavorite(updated.some((item) => item.id === book.id));
+              }}
+            >
+              <FaStar
+                className={`${
+                  isFavorite ? "text-yellow-300" : "text-neutral-300"
+                } transition`}
+              />
+            </button>
+          </div>
         </div>
       </div>
 

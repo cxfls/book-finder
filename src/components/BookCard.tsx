@@ -1,5 +1,6 @@
 import { FaStar } from "react-icons/fa";
-import { toggleFavorite } from "../lib/favorites";
+import { loadFavorites, toggleFavorite } from "../lib/favorites";
+import { useState } from "react";
 
 type BookCardProps = {
   id: string | number;
@@ -17,26 +18,33 @@ export default function BookCard({
   onClick,
 }: BookCardProps) {
   const book = { id, title, author, image };
+
+  const [isFavorite, setIsFavorite] = useState(() => {
+    return loadFavorites().some((item) => item.id === id);
+  });
   return (
     <div
       onClick={onClick}
-      className="relative flex flex-col items-center justify-center gap-4 cursor-pointer mb-4"
+      className="relative flex flex-col items-center justify-center gap-4 cursor-pointer mb-6"
     >
       <img
         src={image}
         alt="이미지"
         className="w-30 hover:scale-105 transition"
       />
-      <p className="bg-neutral-100 text-xs w-5 h-5 flex items-center justify-center rounded-full absolute right-3 bottom-15 cursor-pointer">
+      <p className="bg-neutral-100 text-sm w-6 h-6 flex items-center justify-center rounded-full absolute right-5 bottom-14 cursor-pointer">
         <FaStar
           onClick={(e) => {
             e.stopPropagation();
-            toggleFavorite(book);
+            const updated = toggleFavorite(book);
+            setIsFavorite(updated.some((item) => item.id === id));
           }}
-          className="text-yellow-300"
+          className={`${
+            isFavorite ? "text-yellow-300" : "text-neutral-300"
+          } transition`}
         />
       </p>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center h-10 text-center">
         <h2 className="font-bold">{title}</h2>
         <p className="text-sm text-neutral-500">{author}</p>
       </div>

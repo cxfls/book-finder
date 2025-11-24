@@ -22,7 +22,7 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
   };
 
   return (
-    <div className="lg:w-2xl mx-auto flex items-center gap-3 bg-neutral-100 px-4 py-2.5 rounded-4xl">
+    <div className="lg:w-2xl md:w-xl mx-auto flex items-center gap-3 bg-neutral-100 px-4 py-2.5 rounded-4xl">
       <FaSearch />
       <input
         value={value}
