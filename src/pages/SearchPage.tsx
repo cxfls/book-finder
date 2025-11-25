@@ -19,6 +19,23 @@ export type Book = {
   image: string;
 };
 
+type KakaoBookDocument = {
+  isbn: string;
+  datetime: string;
+  title: string;
+  authors: string[];
+  contents: string;
+  thumbnail: string;
+};
+
+type KakaoBookResponse = {
+  documents: KakaoBookDocument[];
+  meta: {
+    is_end: boolean;
+    // 필요하면 pageable_count, total_count 등도 추가 가능
+  };
+};
+
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query") ?? "";
@@ -70,9 +87,9 @@ export default function SearchPage() {
         throw new Error("API 요청 실패");
       }
 
-      const data = await res.json();
+      const data = (await res.json()) as KakaoBookResponse;
 
-      const mapped: Book[] = data.documents.map((doc: any) => {
+      const mapped: Book[] = data.documents.map((doc) => {
         const isbn = doc.isbn?.split(" ")[0];
 
         return {
@@ -186,13 +203,12 @@ export default function SearchPage() {
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {popularBooks.map((book, index) => (
-                  <div className="relative">
+                  <div key={book.id} className="relative">
                     <span className="z-10 bg-pink-400 w-10 h-10 rounded-full absolute bottom-18 lg:left-8 md:left-28 left-5 text-3xl font-bold flex items-center justify-center shadow-lg">
                       {index + 1}
                     </span>
                     <div>
                       <BookCard
-                        key={book.id}
                         {...book}
                         onClick={() =>
                           navigate(`/book/${book.id}`, { state: { book } })
@@ -211,13 +227,12 @@ export default function SearchPage() {
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {recommendedBooks.map((book, index) => (
-                  <div className="relative">
+                  <div key={book.id} className="relative">
                     <span className="z-10 bg-green-300 w-10 h-10 rounded-full absolute bottom-18 lg:left-8 md:left-28 left-5 text-3xl font-bold flex items-center justify-center shadow-lg">
                       {index + 1}
                     </span>
                     <div>
                       <BookCard
-                        key={book.id}
                         {...book}
                         onClick={() =>
                           navigate(`/book/${book.id}`, { state: { book } })
