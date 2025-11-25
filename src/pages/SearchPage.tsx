@@ -143,13 +143,13 @@ export default function SearchPage() {
   return (
     <div className="relative min-h-screen">
       <div className="max-w-5xl mx-auto px-5 lg:px-0 flex flex-col gap-2">
-        <div className="sticky top-0 bg-white z-10 py-2">
+        <div className="sticky top-0 bg-white z-11 py-2">
           <SearchBar onSubmit={handleSearch} />
         </div>
 
         {history.length > 0 && (
-          <div className="max-w-2xl mx-auto text-xs text-neutral-500">
-            <div className="lg:w-2xl md:w-xl w-md flex justify-between cursor-pointer">
+          <div className="lg:w-2xl md:w-xl w-full mx-auto text-xs text-neutral-500">
+            <div className=" flex justify-between cursor-pointer">
               <p className="mb-2">최근 검색어</p>
               <p
                 className="underline"
@@ -184,10 +184,10 @@ export default function SearchPage() {
                   인기도서
                 </span>
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {popularBooks.map((book, index) => (
                   <div className="relative">
-                    <span className="z-10 bg-pink-400 w-10 h-10 rounded-full absolute bottom-18 lg:left-8 left-5 text-3xl font-bold flex items-center justify-center shadow-lg">
+                    <span className="z-10 bg-pink-400 w-10 h-10 rounded-full absolute bottom-18 lg:left-8 md:left-28 left-5 text-3xl font-bold flex items-center justify-center shadow-lg">
                       {index + 1}
                     </span>
                     <div>
@@ -209,10 +209,10 @@ export default function SearchPage() {
                   추천 도서
                 </span>
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {recommendedBooks.map((book, index) => (
                   <div className="relative">
-                    <span className="z-10 bg-green-300 w-10 h-10 rounded-full absolute bottom-18 lg:left-8 left-5 text-3xl font-bold flex items-center justify-center shadow-lg">
+                    <span className="z-10 bg-green-300 w-10 h-10 rounded-full absolute bottom-18 lg:left-8 md:left-28 left-5 text-3xl font-bold flex items-center justify-center shadow-lg">
                       {index + 1}
                     </span>
                     <div>
