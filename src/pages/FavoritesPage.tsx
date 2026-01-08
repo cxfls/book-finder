@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookCard from "../components/BookCard";
 import { clearFavorites, loadFavorites } from "../lib/favorites";
@@ -6,7 +7,9 @@ import TopButton from "../components/TopButton";
 import { FaTrash } from "react-icons/fa";
 
 export default function FavoritesPage() {
-  const favoriteBook: FavoriteBook[] = loadFavorites();
+  const [favoriteBook, setFavoriteBook] = useState<FavoriteBook[]>(() =>
+    loadFavorites()
+  );
   const navigate = useNavigate();
 
   const onClickClear = () => {
@@ -15,7 +18,8 @@ export default function FavoritesPage() {
       window.confirm("정말로 모든 즐겨찾기를 삭제하시겠습니까?")
     ) {
       clearFavorites();
-      window.location.reload();
+      setFavoriteBook([]);
+      // NOTE: 배포 환경에서 /favorite 새로고침이 404로 이어질 수 있어 reload를 사용하지 않습니다.
     }
   };
 
